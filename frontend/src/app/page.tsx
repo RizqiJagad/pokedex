@@ -6,8 +6,14 @@ import { searchQueryAtom } from '@/store';
 import { PokemonListItem } from '@/types';
 import { apiService } from '@/services/api';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
-import { PokemonCard } from '@/components/PokemonCard';
-import { SkeletonCard } from '@/components/SkeletonCard';
+import dynamic from 'next/dynamic';
+
+const PokemonCard = dynamic(() => import('@/components/PokemonCard').then(mod => mod.PokemonCard), {
+  loading: () => <SkeletonCard />
+});
+const SkeletonCard = dynamic(() => import('@/components/SkeletonCard').then(mod => mod.SkeletonCard), {
+  ssr: false
+});
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useAtom(searchQueryAtom);
